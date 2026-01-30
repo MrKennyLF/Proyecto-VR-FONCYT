@@ -40,4 +40,33 @@ public class MotorInyectora : MonoBehaviour
             if (textoBoton != null) textoBoton.text = "ENCENDER"; // Regresa al mensaje original
         }
     }
+    // --- AGREGA ESTAS LÍNEAS EN CORCHETES ---
+
+    [ContextMenu("Simular Boton Encender")] // <--- ESTO
+    public void BotonEncender()
+    {
+        encendida = !encendida;
+        Debug.Log("Máquina Encendida: " + encendida);
+        if (luzEstado != null) luzEstado.color = encendida ? Color.green : Color.black;
+    }
+
+    [ContextMenu("Simular Carga Material")] // <--- ESTO
+    public void TestCargarMaterial()
+    {
+        // Función de prueba para no necesitar botones
+        CargarPellets("Plástico TEST", Color.blue);
+    }
+
+    [ContextMenu("Simular Boton Iniciar")] // <--- ESTO
+    public void BotonIniciarCiclo()
+    {
+        if (encendida && !procesoEnCurso && nombreMaterial != "Ninguno")
+        {
+            StartCoroutine(ProcesoInyeccion());
+        }
+        else
+        {
+            Debug.Log("?? Error: Enciende la máquina o carga material primero.");
+        }
+    }
 }
