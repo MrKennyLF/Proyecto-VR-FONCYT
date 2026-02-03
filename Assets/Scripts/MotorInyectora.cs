@@ -1,5 +1,6 @@
 using UnityEngine;
-using TMPro; // <--- ¡OJO! Esta línea es vital para que entienda qué es el texto
+using TMPro;
+using System; // <--- ¡OJO! Esta línea es vital para que entienda qué es el texto
 
 public class MotorInyectora : MonoBehaviour
 {
@@ -7,6 +8,10 @@ public class MotorInyectora : MonoBehaviour
     public bool encendido = false;
     public AudioSource miAudio;
     public TextMeshPro textoBoton; // <--- Nueva casilla para arrastrar el texto
+    private bool encendida;
+    private bool procesoEnCurso;
+    private string nombreMaterial;
+    private Renderer luzEstado;
 
     void Start()
     {
@@ -47,7 +52,10 @@ public class MotorInyectora : MonoBehaviour
     {
         encendida = !encendida;
         Debug.Log("Máquina Encendida: " + encendida);
-        if (luzEstado != null) luzEstado.color = encendida ? Color.green : Color.black;
+        if (luzEstado != null)
+        {
+            luzEstado.material.color = encendida ? Color.green : Color.black;
+        }
     }
 
     [ContextMenu("Simular Carga Material")] // <--- ESTO
@@ -55,6 +63,11 @@ public class MotorInyectora : MonoBehaviour
     {
         // Función de prueba para no necesitar botones
         CargarPellets("Plástico TEST", Color.blue);
+    }
+
+    private void CargarPellets(string v, Color blue)
+    {
+        throw new NotImplementedException();
     }
 
     [ContextMenu("Simular Boton Iniciar")] // <--- ESTO
@@ -68,5 +81,10 @@ public class MotorInyectora : MonoBehaviour
         {
             Debug.Log("?? Error: Enciende la máquina o carga material primero.");
         }
+    }
+
+    private string ProcesoInyeccion()
+    {
+        throw new NotImplementedException();
     }
 }
