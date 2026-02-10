@@ -1,95 +1,86 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 public class ControladorInyectora : MonoBehaviour
 {
-    [Header("Estado de la M�quina")]
+    [Header("--- ESTADO DE LA MÁQUINA ---")]
     public bool encendida = false;
     public bool procesoEnCurso = false;
 
-    [Header("Materiales (Pellets)")]
-    // Aqu� guardamos el color del material actual (Ej. Rojo para ABS, Transparente para PP)
-    public Color colorMaterialActual = Color.white;
-    public string nombreMaterial = "Ninguno";
+    [Header("--- CONFIGURACIÓN (ARRASTRA AQUÍ) ---")]
+    public Transform puntoDeSalida; // Un objeto vacío donde nacerá la pieza
+    public GameObject moldePrefab;  // El objeto 3D de la pieza final (con Rigidbody)
+    public float tiempoDeInyeccion = 4.0f; // Segundos que tarda en fabricar
 
-    [Header("Configuraci�n")]
-    public Transform puntoDeSalida; // D�nde aparece la pieza final
-    public GameObject moldePrefab;  // El objeto 3D que sale (ej. una carcasa o vaso)
-    public float tiempoDeInyeccion = 5.0f; // Cu�nto tarda el proceso
+    [Header("--- CONFIGURACIÓN VISUAL (OPCIONAL) ---")]
+    public Light luzEstado; // La luz de la sirena
+    public AudioSource audioMaquina; // Sonido de trabajo
 
-    [Header("Efectos (Opcional)")]
-    public AudioSource sonidoMaquina;
-    public Light luzEstado; // Verde = Lista, Rojo = Trabajando
+    // --- FUNCIONES (BOTONES) ---
 
-    // --- FUNCIONES QUE TUS BOTONES VR VAN A LLAMAR ---
-
+    [ContextMenu("TEST: Botón Power")] // Esto hace que aparezca en el menú de clic derecho
     public void BotonEncender()
     {
-        encendida = !encendida; // Alternar encendido/apagado
-        Debug.Log("M�quina Encendida: " + encendida);
-
-        if (luzEstado != null) luzEstado.color = encendida ? Color.green : Color.black;
+        encendida = !encendida; // Cambia de ON a OFF y viceversa
+        Debug.Log("Inyectora Encendida: " + encendida);
+        ActualizarLuces();
     }
 
-    public void CargarPellets(string tipo, Color color)
-    {
-        if (!procesoEnCurso)
-        {
-            nombreMaterial = tipo;
-            colorMaterialActual = color;
-            Debug.Log("Material Cargado: " + tipo);
-        }
-    }
-
+    [ContextMenu("TEST: Botón Iniciar")]
     public void BotonIniciarCiclo()
     {
-        if (encendida && !procesoEnCurso && nombreMaterial != "Ninguno")
+        // Solo arranca si está encendida Y no está ocupada ya
+        if (encendida && !procesoEnCurso)
         {
             StartCoroutine(ProcesoInyeccion());
         }
         else
         {
-            Debug.Log("Error: M�quina apagada o sin material.");
+            Debug.Log("⚠️ ERROR: La máquina está apagada u ocupada.");
         }
     }
 
-    // --- LA MAGIA (CORRUTINA) ---
+    // --- LA LÓGICA INTERNA ---
+
     IEnumerator ProcesoInyeccion()
     {
         procesoEnCurso = true;
-        Debug.Log("Iniciando Inyecci�n...");
+        Debug.Log("♻️ Iniciando ciclo de inyección...");
 
-        if (luzEstado != null) luzEstado.color = Color.red; // Luz roja trabajando
-        if (sonidoMaquina != null) sonidoMaquina.Play();
+        // Estado visual: Trabajando (Luz Roja)
+        if (luzEstado != null) luzEstado.color = Color.red;
+        if (audioMaquina != null) audioMaquina.Play();
 
-        // Esperamos el tiempo del proceso (Simulaci�n)
+        // Esperamos el tiempo de fabricación
         yield return new WaitForSeconds(tiempoDeInyeccion);
 
-        // Crear la pieza final
+        // Crear la pieza
         ExpulsarPieza();
 
+        // Restaurar estado
         procesoEnCurso = false;
-        if (luzEstado != null) luzEstado.color = Color.green; // Luz verde lista
-        Debug.Log("Ciclo Terminado.");
+        ActualizarLuces();
+        Debug.Log("✅ Ciclo terminado.");
     }
 
     void ExpulsarPieza()
     {
-        // 1. Crear el objeto en el punto de salida
-        GameObject piezaNueva = Instantiate(moldePrefab, puntoDeSalida.position, puntoDeSalida.rotation);
-
-        // 2. Pintarla del color de los pellets
-        Renderer rend = piezaNueva.GetComponent<Renderer>();
-        if (rend != null)
+        if (moldePrefab != null && puntoDeSalida != null)
         {
-            rend.material.color = colorMaterialActual;
+            Instantiate(moldePrefab, puntoDeSalida.position, puntoDeSalida.rotation);
+        }
+        else
+        {
+            Debug.LogError("❌ FALTAN ASIGNAR OBJETOS EN EL INSPECTOR (Prefab o PuntoSalida)");
         }
     }
-    void Update()
+
+    void ActualizarLuces()
     {
-        // Solo para pruebas en PC
-        if (Input.GetKeyDown(KeyCode.E)) BotonEncender();
-        if (Input.GetKeyDown(KeyCode.M)) CargarPellets("ABS Rojo", Color.red);
-        if (Input.GetKeyDown(KeyCode.Space)) BotonIniciarCiclo();
+        if (luzEstado != null)
+        {
+            if (encendida) luzEstado.color = Color.green; // Verde = Lista
+            else luzEstado.color = Color.black; // Negro = Apagada
+        }
     }
 }
