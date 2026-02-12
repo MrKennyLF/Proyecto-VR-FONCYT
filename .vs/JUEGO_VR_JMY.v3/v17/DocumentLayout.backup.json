@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\Design\\Documents\\Proyecto VR 16Enero2026\\JUEGO_VR_JMY.v3\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{80C162C8-AF3C-3038-A01C-65102FC085C9}|Assembly-CSharp.csproj|c:\\users\\design\\documents\\proyecto vr 16enero2026\\juego_vr_jmy.v3\\assets\\scripts\\botonvr.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{80C162C8-AF3C-3038-A01C-65102FC085C9}|Assembly-CSharp.csproj|c:\\users\\design\\documents\\proyecto vr 16enero2026\\juego_vr_jmy.v3\\assets\\scripts\\controladorinyectora.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{80C162C8-AF3C-3038-A01C-65102FC085C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\controladorinyectora.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{80C162C8-AF3C-3038-A01C-65102FC085C9}|Assembly-CSharp.csproj|C:\\Users\\Design\\Documents\\Proyecto VR 16Enero2026\\JUEGO_VR_JMY.v3\\assets\\scripts\\botonvr.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{80C162C8-AF3C-3038-A01C-65102FC085C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\botonvr.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{80C162C8-AF3C-3038-A01C-65102FC085C9}|Assembly-CSharp.csproj|c:\\users\\design\\documents\\proyecto vr 16enero2026\\juego_vr_jmy.v3\\assets\\scripts\\motorinyectora.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{80C162C8-AF3C-3038-A01C-65102FC085C9}|Assembly-CSharp.csproj|C:\\Users\\Design\\Documents\\Proyecto VR 16Enero2026\\JUEGO_VR_JMY.v3\\assets\\scripts\\motorinyectora.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{80C162C8-AF3C-3038-A01C-65102FC085C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\motorinyectora.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{80C162C8-AF3C-3038-A01C-65102FC085C9}|Assembly-CSharp.csproj|C:\\Users\\Design\\Documents\\Proyecto VR 16Enero2026\\JUEGO_VR_JMY.v3\\assets\\scripts\\controladorinyectora.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{80C162C8-AF3C-3038-A01C-65102FC085C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\controladorinyectora.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Design\\Documents\\Proyecto VR 16Enero2026\\JUEGO_VR_JMY.v3\\Library\\PackageCache\\com.unity.render-pipelines.universal@bd2aa618476e\\Shaders\\Lit.shader||{3B902123-F8A7-4915-9F01-361F908088D0}",
@@ -46,11 +46,15 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
             {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            },
+            {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "BotonVR.cs",
               "DocumentMoniker": "C:\\Users\\Design\\Documents\\Proyecto VR 16Enero2026\\JUEGO_VR_JMY.v3\\Assets\\Scripts\\BotonVR.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\BotonVR.cs",
@@ -58,24 +62,20 @@
               "RelativeToolTip": "Assets\\Scripts\\BotonVR.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAADsAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-03T20:57:21.262Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+              "WhenOpened": "2026-02-03T20:57:21.262Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "ControladorInyectora.cs",
               "DocumentMoniker": "C:\\Users\\Design\\Documents\\Proyecto VR 16Enero2026\\JUEGO_VR_JMY.v3\\Assets\\Scripts\\ControladorInyectora.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\ControladorInyectora.cs",
               "ToolTip": "C:\\Users\\Design\\Documents\\Proyecto VR 16Enero2026\\JUEGO_VR_JMY.v3\\Assets\\Scripts\\ControladorInyectora.cs",
               "RelativeToolTip": "Assets\\Scripts\\ControladorInyectora.cs",
-              "ViewState": "AgIAABEAAAAAAAAAAAAQwCQAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAABQAAAAAAAAAAAAQwDUAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-30T20:19:01.117Z"
+              "WhenOpened": "2026-01-30T20:19:01.117Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -127,7 +127,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "MotorInyectora.cs",
               "DocumentMoniker": "C:\\Users\\Design\\Documents\\Proyecto VR 16Enero2026\\JUEGO_VR_JMY.v3\\Assets\\Scripts\\MotorInyectora.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\MotorInyectora.cs",
@@ -135,8 +135,7 @@
               "RelativeToolTip": "Assets\\Scripts\\MotorInyectora.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAADgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-23T01:45:29.157Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-23T01:45:29.157Z"
             },
             {
               "$type": "Document",

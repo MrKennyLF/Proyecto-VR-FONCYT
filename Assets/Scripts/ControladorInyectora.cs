@@ -15,13 +15,24 @@ public class ControladorInyectora : MonoBehaviour
     [Header("--- CONFIGURACIÓN VISUAL (OPCIONAL) ---")]
     public Light luzEstado; // La luz de la sirena
     public AudioSource audioMaquina; // Sonido de trabajo
+    private float tiempoUltimoClick = 0f; // Para evitar el rebote
+    private float esperaRebote = 0.5f;    // Medio segundo de espera
 
     // --- FUNCIONES (BOTONES) ---
 
-    [ContextMenu("TEST: Botón Power")] // Esto hace que aparezca en el menú de clic derecho
+    [ContextMenu("TEST: Botón Power")]
     public void BotonEncender()
     {
-        encendida = !encendida; // Cambia de ON a OFF y viceversa
+        // SI ha pasado menos de medio segundo desde el último click... ¡IGNORAR!
+        if (Time.time - tiempoUltimoClick < esperaRebote)
+        {
+            return; // Nos salimos sin hacer nada
+        }
+
+        // Si pasó el tiempo, actualizamos el reloj y ejecutamos
+        tiempoUltimoClick = Time.time;
+
+        encendida = !encendida;
         Debug.Log("Inyectora Encendida: " + encendida);
         ActualizarLuces();
     }
@@ -29,14 +40,16 @@ public class ControladorInyectora : MonoBehaviour
     [ContextMenu("TEST: Botón Iniciar")]
     public void BotonIniciarCiclo()
     {
-        // Solo arranca si está encendida Y no está ocupada ya
+        if (Time.time - tiempoUltimoClick < esperaRebote) return; // Anti-rebote
+        tiempoUltimoClick = Time.time;
+
         if (encendida && !procesoEnCurso)
         {
             StartCoroutine(ProcesoInyeccion());
         }
         else
         {
-            Debug.Log("⚠️ ERROR: La máquina está apagada u ocupada.");
+            Debug.Log("⚠️ La máquina está apagada u ocupada.");
         }
     }
 
