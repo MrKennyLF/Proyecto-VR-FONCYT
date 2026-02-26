@@ -1,60 +1,56 @@
-using UnityEngine;
-using UnityEngine.Events; // Necesario para conectar cosas
+Ôªøusing UnityEngine;
 
 public class BotonVR : MonoBehaviour
 {
-    [Header("ConfiguraciÛn")]
-    public float distanciaPresion = 0.02f; // Cu·nto se hunde el botÛn (2cm)
-    public float velocidadRetorno = 5.0f;  // QuÈ tan r·pido vuelve a subir
-    public string tagMano = "PlayerHand";  // Etiqueta de tus manos VR
+    [Header("--- CONEXI√ìN (ARRASTRA LA INYECTORA AQU√ç) ---")]
+    public ControladorInyectora maquinaInyectora;
 
-    [Header("Eventos")]
-    public UnityEvent AlPresionar; // °AquÌ arrastraremos la funciÛn de la m·quina!
+    [Header("--- LA PIEZA DE ESTE BOT√ìN ---")]
+    public GameObject piezaParaEsteBoton; // Arrastra el modelo/prefab que quieres que salga
+
+    [Header("Ajustes F√≠sicos")]
+    public float distanciaPresion = 0.02f;
+    public float velocidadRetorno = 5.0f;
+    public string tagMano = "PlayerHand";
 
     private Vector3 posicionInicial;
     private bool estaPresionado = false;
 
-    void Start()
-    {
-        posicionInicial = transform.localPosition; // Guardamos dÛnde empieza
-    }
+    void Start() { posicionInicial = transform.localPosition; }
 
     void Update()
     {
-        // LÛgica visual: Si no lo tocan, vuelve a su sitio
         if (!estaPresionado)
-        {
             transform.localPosition = Vector3.Lerp(transform.localPosition, posicionInicial, Time.deltaTime * velocidadRetorno);
-        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        // Si entra algo con el tag "PlayerHand" y el botÛn no estaba presionado...
-        if (other.CompareTag(tagMano) && !estaPresionado)
-        {
-            Presionar();
-        }
+        if (other.CompareTag(tagMano) && !estaPresionado) Presionar();
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag(tagMano))
-        {
-            estaPresionado = false; // Soltamos el botÛn
-        }
+        if (other.CompareTag(tagMano)) estaPresionado = false;
     }
 
     void Presionar()
     {
         estaPresionado = true;
+        transform.localPosition = new Vector3(posicionInicial.x, posicionInicial.y - distanciaPresion, posicionInicial.z);
 
-        // 1. Efecto visual (Hundir el botÛn)
-        Vector3 posicionHundida = new Vector3(posicionInicial.x, posicionInicial.y - distanciaPresion, posicionInicial.z);
-        transform.localPosition = posicionHundida;
-
-        // 2. Disparar la acciÛn
-        Debug.Log("°BotÛn Tocado!");
-        AlPresionar.Invoke();
+        // HABLAMOS DIRECTAMENTE CON LA M√ÅQUINA (Sin UnityEvents)
+        if (maquinaInyectora != null && piezaParaEsteBoton != null)
+        {
+            Debug.Log("üîò Bot√≥n presionado. Enviando modelo: " + piezaParaEsteBoton.name);
+            maquinaInyectora.IniciarCicloConPieza(piezaParaEsteBoton);
+        }
+        else
+        {
+            Debug.LogError("‚ùå ¬°Falta arrastrar la Inyectora o la Pieza en el Inspector de este bot√≥n!");
+        }
     }
+
+    // Para tus pruebas con el mouse
+    private void OnMouseDown() { Presionar(); }
 }

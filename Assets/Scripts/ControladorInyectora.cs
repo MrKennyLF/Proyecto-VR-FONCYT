@@ -12,13 +12,51 @@ public class ControladorInyectora : MonoBehaviour
     public GameObject moldePrefab;  // El objeto 3D de la pieza final (con Rigidbody)
     public float tiempoDeInyeccion = 4.0f; // Segundos que tarda en fabricar
 
+    [Header("Material")]
+    public Color colorActualMaterial = Color.white; // Blanco por defecto si no le echan nada
+
     [Header("--- CONFIGURACIÓN VISUAL (OPCIONAL) ---")]
     public Light luzEstado; // La luz de la sirena
     public AudioSource audioMaquina; // Sonido de trabajo
     private float tiempoUltimoClick = 0f; // Para evitar el rebote
     private float esperaRebote = 0.5f;    // Medio segundo de espera
 
-    // --- FUNCIONES (BOTONES) ---
+
+    // =========================================================
+    // --- NUEVA FUNCIÓN DINÁMICA PARA LOS BOTONES VR ---
+    // =========================================================
+    public void IniciarCicloConPieza(GameObject piezaDesdeBoton)
+    {
+        // 1. Verificamos anti-rebote
+        if (Time.time - tiempoUltimoClick < esperaRebote) return;
+        tiempoUltimoClick = Time.time;
+
+        if (encendida && !procesoEnCurso)
+        {
+            // 2. ACTUALIZACIÓN DEL MOLDE
+            if (piezaDesdeBoton != null)
+            {
+                moldePrefab = piezaDesdeBoton;
+                // Mensaje en Cyan para identificar el cambio de pieza
+                Debug.Log("<color=cyan>🔧 INYECTORA: Molde actualizado a -> </color>" + piezaDesdeBoton.name);
+            }
+            else
+            {
+                Debug.LogWarning("⚠️ El botón no envió ninguna pieza, usando la que estaba por defecto.");
+            }
+
+            StartCoroutine(ProcesoInyeccion());
+        }
+        else
+        {
+            Debug.Log("<color=orange>⚠️ La máquina está apagada u ocupada.</color>");
+        }
+    }
+
+
+    // =========================================================
+    // --- TUS FUNCIONES ORIGINALES (BOTONES SIMPLES) ---
+    // =========================================================
 
     [ContextMenu("TEST: Botón Power")]
     public void BotonEncender()
@@ -38,7 +76,7 @@ public class ControladorInyectora : MonoBehaviour
     }
 
     [ContextMenu("TEST: Botón Iniciar")]
-    public void BotonIniciarCiclo()
+    public void BotonIniciarCiclo() // Tu función original para iniciar sin cambiar pieza
     {
         if (Time.time - tiempoUltimoClick < esperaRebote) return; // Anti-rebote
         tiempoUltimoClick = Time.time;
@@ -53,7 +91,10 @@ public class ControladorInyectora : MonoBehaviour
         }
     }
 
+
+    // =========================================================
     // --- LA LÓGICA INTERNA ---
+    // =========================================================
 
     IEnumerator ProcesoInyeccion()
     {
@@ -80,7 +121,23 @@ public class ControladorInyectora : MonoBehaviour
     {
         if (moldePrefab != null && puntoDeSalida != null)
         {
-            Instantiate(moldePrefab, puntoDeSalida.position, puntoDeSalida.rotation);
+            // 1. Instanciamos la pieza y la guardamos en la variable 'nuevaPieza'
+            GameObject nuevaPieza = Instantiate(moldePrefab, puntoDeSalida.position, puntoDeSalida.rotation);
+
+            // 2. Buscamos su "pintor" (MeshRenderer) en la pieza o en sus hijos
+            MeshRenderer rendererPieza = nuevaPieza.GetComponentInChildren<MeshRenderer>();
+
+            // 3. Si lo encontramos, le aplicamos el color de los pellets
+            if (rendererPieza != null)
+            {
+                // Para asegurarnos de crear una instancia del material y no cambiar el original del proyecto
+                rendererPieza.material.color = colorActualMaterial;
+                Debug.Log("🎨 Pieza pintada de color: " + colorActualMaterial);
+            }
+            else
+            {
+                Debug.LogWarning("⚠️ La pieza no tiene MeshRenderer, no se pudo pintar.");
+            }
         }
         else
         {
