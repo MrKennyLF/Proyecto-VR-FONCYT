@@ -3,6 +3,8 @@ using System.Collections;
 
 public class ControladorInyectora : MonoBehaviour
 {
+    [Header("--- ANIMACIÓN ---")]
+    public Animator animadorMaquina; // Arrastra aquí el modelo de la máquina
     [Header("--- ESTADO DE LA MÁQUINA ---")]
     public bool encendida = false;
     public bool procesoEnCurso = false;
@@ -104,6 +106,12 @@ public class ControladorInyectora : MonoBehaviour
         // Estado visual: Trabajando (Luz Roja)
         if (luzEstado != null) luzEstado.color = Color.red;
         if (audioMaquina != null) audioMaquina.Play();
+
+        // 🎬 ¡DISPARAMOS LA ANIMACIÓN!
+        if (animadorMaquina != null)
+        {
+            animadorMaquina.SetTrigger("IniciarAnimacion");
+        }
 
         // Esperamos el tiempo de fabricación
         yield return new WaitForSeconds(tiempoDeInyeccion);
