@@ -129,22 +129,29 @@ public class ControladorInyectora : MonoBehaviour
     {
         if (moldePrefab != null && puntoDeSalida != null)
         {
-            // 1. Instanciamos la pieza y la guardamos en la variable 'nuevaPieza'
+            // 1. Instanciamos la pieza
             GameObject nuevaPieza = Instantiate(moldePrefab, puntoDeSalida.position, puntoDeSalida.rotation);
 
-            // 2. Buscamos su "pintor" (MeshRenderer) en la pieza o en sus hijos
-            MeshRenderer rendererPieza = nuevaPieza.GetComponentInChildren<MeshRenderer>();
+            // 2. Buscamos TODOS los MeshRenderers en la pieza principal y en sus hijos (¡Ojo a la 's' de Components!)
+            MeshRenderer[] todosLosRenderers = nuevaPieza.GetComponentsInChildren<MeshRenderer>();
 
-            // 3. Si lo encontramos, le aplicamos el color de los pellets
-            if (rendererPieza != null)
+            // 3. Verificamos si encontramos al menos uno
+            if (todosLosRenderers.Length > 0)
             {
-                // Para asegurarnos de crear una instancia del material y no cambiar el original del proyecto
-                rendererPieza.material.color = colorActualMaterial;
-                Debug.Log("🎨 Pieza pintada de color: " + colorActualMaterial);
+                // 4. Recorremos cada parte de la taza (Cuerpo, Oreja, etc.)
+                foreach (MeshRenderer rend in todosLosRenderers)
+                {
+                    // 5. Recorremos todos los materiales de esa parte (por si tiene más de uno)
+                    foreach (Material mat in rend.materials)
+                    {
+                        mat.color = colorActualMaterial;
+                    }
+                }
+                Debug.Log("🎨 Taza (y su oreja) pintada de color: " + colorActualMaterial);
             }
             else
             {
-                Debug.LogWarning("⚠️ La pieza no tiene MeshRenderer, no se pudo pintar.");
+                Debug.LogWarning("⚠️ La pieza no tiene MeshRenderers, no se pudo pintar.");
             }
         }
         else
@@ -152,7 +159,6 @@ public class ControladorInyectora : MonoBehaviour
             Debug.LogError("❌ FALTAN ASIGNAR OBJETOS EN EL INSPECTOR (Prefab o PuntoSalida)");
         }
     }
-
     void ActualizarLuces()
     {
         if (luzEstado != null)
