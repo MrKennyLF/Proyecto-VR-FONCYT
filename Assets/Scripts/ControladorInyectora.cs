@@ -12,6 +12,9 @@ public class ControladorInyectora : MonoBehaviour
     public Transform puntoDeSalida;
     public Color colorActualMaterial = Color.white;
 
+    [Header("Animación 🎬")]
+    public Animator animadorMaquina; // <-- NUEVO: Aquí conectaremos tu animación
+
     [Header("Tiempos Reales de Ciclo (Segundos)")]
     public float tiempoCierreMolde = 3f;
     public float tiempoInyeccion = 2f;
@@ -21,13 +24,12 @@ public class ControladorInyectora : MonoBehaviour
 
     [Header("Efectos de Sonido 🔊")]
     public AudioSource reproductorSonido;
-    public AudioClip sonidoEncendido;        // <-- NUEVO: Para el botón de encender
+    public AudioClip sonidoEncendido;
     public AudioClip sonidoMecanica;
     public AudioClip sonidoInyeccion;
     public AudioClip sonidoEnfriamiento;
     public AudioClip sonidoExpulsion;
 
-    // --- NUEVA FUNCIÓN: PARA EL BOTÓN DE ENCENDIDO ---
     public void BotonPrenderApagar()
     {
         if (maquinaEnUso)
@@ -36,7 +38,7 @@ public class ControladorInyectora : MonoBehaviour
             return;
         }
 
-        maquinaEncendida = !maquinaEncendida; // Cambia de apagado a prendido y viceversa
+        maquinaEncendida = !maquinaEncendida;
 
         if (maquinaEncendida)
         {
@@ -46,21 +48,18 @@ public class ControladorInyectora : MonoBehaviour
         else
         {
             Debug.Log("🔌 MÁQUINA APAGADA");
-            if (reproductorSonido.isPlaying) reproductorSonido.Stop(); // Silencia si se apaga
+            if (reproductorSonido != null && reproductorSonido.isPlaying) reproductorSonido.Stop();
         }
     }
 
-    // --- FUNCIÓN LIMPIA: PARA EL BOTÓN DE INICIAR CICLO ---
     public void IniciarCicloDeInyeccion()
     {
-        // Seguro #1: ¿Está prendida?
         if (!maquinaEncendida)
         {
             Debug.LogWarning("❌ La máquina está apagada. Presiona el botón de encendido primero.");
             return;
         }
 
-        // Seguro #2: ¿Ya está trabajando?
         if (!maquinaEnUso)
         {
             StartCoroutine(SecuenciaInyeccionReal());
@@ -76,25 +75,33 @@ public class ControladorInyectora : MonoBehaviour
         maquinaEnUso = true;
         Debug.Log("🟢 INICIANDO CICLO...");
 
+        // 1. CIERRE DEL MOLDE
         Reproducir(sonidoMecanica);
+        if (animadorMaquina != null) animadorMaquina.SetTrigger("CerrarMolde");
         Debug.Log("Cerrando molde...");
         yield return new WaitForSeconds(tiempoCierreMolde);
 
+        // 2. INYECCIÓN
         Reproducir(sonidoInyeccion);
         Debug.Log("Inyectando polímero...");
         yield return new WaitForSeconds(tiempoInyeccion);
 
+        // 3. COMPACTACIÓN
         Debug.Log("Compactando pieza...");
         yield return new WaitForSeconds(tiempoCompactacion);
 
+        // 4. ENFRIAMIENTO
         Reproducir(sonidoEnfriamiento);
         Debug.Log("Enfriando...");
         yield return new WaitForSeconds(tiempoEnfriamiento);
 
+        // 5. APERTURA Y EXPULSIÓN
         Reproducir(sonidoMecanica);
+        if (animadorMaquina != null) animadorMaquina.SetTrigger("AbrirMolde");
         Debug.Log("Abriendo molde...");
         yield return new WaitForSeconds(tiempoApertura);
 
+        // 6. PIEZA LISTA
         Reproducir(sonidoExpulsion);
         ExpulsarPieza();
 
