@@ -2,11 +2,18 @@
 
 public class BotonVR : MonoBehaviour
 {
-    [Header("--- CONEXIÓN (ARRASTRA LA INYECTORA AQUÍ) ---")]
+    // Esto crea un menú desplegable en el Inspector de Unity
+    public enum TipoDeBoton { Encendido, IniciarCiclo }
+
+    [Header("--- FUNCIÓN DE ESTE BOTÓN ---")]
+    public TipoDeBoton queHaceEsteBoton = TipoDeBoton.IniciarCiclo;
+
+    [Header("--- CONEXIÓN ---")]
     public ControladorInyectora maquinaInyectora;
 
-    [Header("--- LA PIEZA DE ESTE BOTÓN ---")]
-    public GameObject piezaParaEsteBoton; // Arrastra el modelo/prefab que quieres que salga
+    [Header("--- (Opcional) LA PIEZA DE ESTE BOTÓN ---")]
+    [Tooltip("Solo necesitas llenar esto si es un botón de Iniciar Ciclo")]
+    public GameObject piezaParaEsteBoton;
 
     [Header("Ajustes Físicos")]
     public float distanciaPresion = 0.02f;
@@ -34,23 +41,31 @@ public class BotonVR : MonoBehaviour
         if (other.CompareTag(tagMano)) estaPresionado = false;
     }
 
-    void Presionar()
+    // AHORA ES PÚBLICA, el Oculus Interaction SDK ya la puede ver
+    public void Presionar()
     {
         estaPresionado = true;
         transform.localPosition = new Vector3(posicionInicial.x, posicionInicial.y - distanciaPresion, posicionInicial.z);
 
-        // HABLAMOS DIRECTAMENTE CON LA MÁQUINA (Sin UnityEvents)
-        if (maquinaInyectora != null && piezaParaEsteBoton != null)
+        if (maquinaInyectora != null)
         {
-            Debug.Log("🔘 Botón presionado. Enviando modelo: " + piezaParaEsteBoton.name);
-            maquinaInyectora.IniciarCicloConPieza(piezaParaEsteBoton);
-        }
-        else
-        {
-            Debug.LogError("❌ ¡Falta arrastrar la Inyectora o la Pieza en el Inspector de este botón!");
+            // ¿Qué tipo de botón soy?
+            if (queHaceEsteBoton == TipoDeBoton.Encendido)
+            {
+                Debug.Log("🔘 Botón de Encendido presionado.");
+                maquinaInyectora.BotonPrenderApagar();
+            }
+            else if (queHaceEsteBoton == TipoDeBoton.IniciarCiclo)
+            {
+                Debug.Log("🔘 Botón de Iniciar Ciclo presionado.");
+                if (piezaParaEsteBoton != null)
+                {
+                    maquinaInyectora.moldePrefab = piezaParaEsteBoton;
+                }
+                maquinaInyectora.IniciarCicloDeInyeccion();
+            }
         }
     }
 
-    // Para tus pruebas con el mouse
     private void OnMouseDown() { Presionar(); }
 }

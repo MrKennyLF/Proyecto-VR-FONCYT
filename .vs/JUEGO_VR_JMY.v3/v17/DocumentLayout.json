@@ -3,8 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\Design\\Documents\\Proyecto VR 16Enero2026\\JUEGO_VR_JMY.v3\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{80C162C8-AF3C-3038-A01C-65102FC085C9}|Assembly-CSharp.csproj|c:\\users\\design\\documents\\proyecto vr 16enero2026\\juego_vr_jmy.v3\\assets\\scripts\\controladorinyectora.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{80C162C8-AF3C-3038-A01C-65102FC085C9}|Assembly-CSharp.csproj|c:\\users\\design\\documents\\proyecto vr 16enero2026\\juego_vr_jmy.v3\\assets\\scripts\\botonvr.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{80C162C8-AF3C-3038-A01C-65102FC085C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\botonvr.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{80C162C8-AF3C-3038-A01C-65102FC085C9}|Assembly-CSharp.csproj|C:\\Users\\Design\\Documents\\Proyecto VR 16Enero2026\\JUEGO_VR_JMY.v3\\assets\\scripts\\controladorinyectora.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{80C162C8-AF3C-3038-A01C-65102FC085C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\controladorinyectora.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{80C162C8-AF3C-3038-A01C-65102FC085C9}|Assembly-CSharp.csproj|C:\\Users\\Design\\Documents\\Proyecto VR 16Enero2026\\JUEGO_VR_JMY.v3\\assets\\scripts\\controladorpda.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{80C162C8-AF3C-3038-A01C-65102FC085C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\controladorpda.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{80C162C8-AF3C-3038-A01C-65102FC085C9}|Assembly-CSharp.csproj|C:\\Users\\Design\\Documents\\Proyecto VR 16Enero2026\\JUEGO_VR_JMY.v3\\assets\\scripts\\motorinyectora.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{80C162C8-AF3C-3038-A01C-65102FC085C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\motorinyectora.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{80C162C8-AF3C-3038-A01C-65102FC085C9}|Assembly-CSharp.csproj|C:\\Users\\Design\\Documents\\Proyecto VR 16Enero2026\\JUEGO_VR_JMY.v3\\assets\\scripts\\receptortolva.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -27,19 +39,56 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "BotonVR.cs",
+              "DocumentMoniker": "C:\\Users\\Design\\Documents\\Proyecto VR 16Enero2026\\JUEGO_VR_JMY.v3\\Assets\\Scripts\\BotonVR.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\BotonVR.cs",
+              "ToolTip": "C:\\Users\\Design\\Documents\\Proyecto VR 16Enero2026\\JUEGO_VR_JMY.v3\\Assets\\Scripts\\BotonVR.cs",
+              "RelativeToolTip": "Assets\\Scripts\\BotonVR.cs",
+              "ViewState": "AgIAACEAAAAAAAAAAAAxwDYAAAA/AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-12T22:20:46.103Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ControladorPDA.cs",
+              "DocumentMoniker": "C:\\Users\\Design\\Documents\\Proyecto VR 16Enero2026\\JUEGO_VR_JMY.v3\\Assets\\Scripts\\ControladorPDA.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\ControladorPDA.cs",
+              "ToolTip": "C:\\Users\\Design\\Documents\\Proyecto VR 16Enero2026\\JUEGO_VR_JMY.v3\\Assets\\Scripts\\ControladorPDA.cs",
+              "RelativeToolTip": "Assets\\Scripts\\ControladorPDA.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACgAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-12T22:14:27.211Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "MotorInyectora.cs",
+              "DocumentMoniker": "C:\\Users\\Design\\Documents\\Proyecto VR 16Enero2026\\JUEGO_VR_JMY.v3\\Assets\\Scripts\\MotorInyectora.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\MotorInyectora.cs",
+              "ToolTip": "C:\\Users\\Design\\Documents\\Proyecto VR 16Enero2026\\JUEGO_VR_JMY.v3\\Assets\\Scripts\\MotorInyectora.cs",
+              "RelativeToolTip": "Assets\\Scripts\\MotorInyectora.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-03-10T21:33:33.427Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "ControladorInyectora.cs",
               "DocumentMoniker": "C:\\Users\\Design\\Documents\\Proyecto VR 16Enero2026\\JUEGO_VR_JMY.v3\\Assets\\Scripts\\ControladorInyectora.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\ControladorInyectora.cs",
               "ToolTip": "C:\\Users\\Design\\Documents\\Proyecto VR 16Enero2026\\JUEGO_VR_JMY.v3\\Assets\\Scripts\\ControladorInyectora.cs",
               "RelativeToolTip": "Assets\\Scripts\\ControladorInyectora.cs",
-              "ViewState": "AgIAAH4AAAAAAAAAAAAAwKAAAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAAFwAAAAAAAAAAAAQwG4AAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-02-26T23:47:17.104Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "ReceptorTolva.cs",
               "DocumentMoniker": "C:\\Users\\Design\\Documents\\Proyecto VR 16Enero2026\\JUEGO_VR_JMY.v3\\Assets\\Scripts\\ReceptorTolva.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\ReceptorTolva.cs",
@@ -51,7 +100,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 5,
               "Title": "BoteMaterial.cs",
               "DocumentMoniker": "C:\\Users\\Design\\Documents\\Proyecto VR 16Enero2026\\JUEGO_VR_JMY.v3\\Assets\\Scripts\\BoteMaterial.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\BoteMaterial.cs",

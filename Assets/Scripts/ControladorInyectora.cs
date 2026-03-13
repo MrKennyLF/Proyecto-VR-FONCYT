@@ -3,168 +3,128 @@ using System.Collections;
 
 public class ControladorInyectora : MonoBehaviour
 {
-    [Header("--- ANIMACIÓN ---")]
-    public Animator animadorMaquina; // Arrastra aquí el modelo de la máquina
-    [Header("--- ESTADO DE LA MÁQUINA ---")]
-    public bool encendida = false;
-    public bool procesoEnCurso = false;
+    [Header("Estado de la Máquina")]
+    public bool maquinaEncendida = false;
+    private bool maquinaEnUso = false;
 
-    [Header("--- CONFIGURACIÓN (ARRASTRA AQUÍ) ---")]
-    public Transform puntoDeSalida; // Un objeto vacío donde nacerá la pieza
-    public GameObject moldePrefab;  // El objeto 3D de la pieza final (con Rigidbody)
-    public float tiempoDeInyeccion = 4.0f; // Segundos que tarda en fabricar
+    [Header("Configuración de Pieza")]
+    public GameObject moldePrefab;
+    public Transform puntoDeSalida;
+    public Color colorActualMaterial = Color.white;
 
-    [Header("Material")]
-    public Color colorActualMaterial = Color.white; // Blanco por defecto si no le echan nada
+    [Header("Tiempos Reales de Ciclo (Segundos)")]
+    public float tiempoCierreMolde = 3f;
+    public float tiempoInyeccion = 2f;
+    public float tiempoCompactacion = 5f;
+    public float tiempoEnfriamiento = 15f;
+    public float tiempoApertura = 4f;
 
-    [Header("--- CONFIGURACIÓN VISUAL (OPCIONAL) ---")]
-    public Light luzEstado; // La luz de la sirena
-    public AudioSource audioMaquina; // Sonido de trabajo
-    private float tiempoUltimoClick = 0f; // Para evitar el rebote
-    private float esperaRebote = 0.5f;    // Medio segundo de espera
+    [Header("Efectos de Sonido 🔊")]
+    public AudioSource reproductorSonido;
+    public AudioClip sonidoEncendido;        // <-- NUEVO: Para el botón de encender
+    public AudioClip sonidoMecanica;
+    public AudioClip sonidoInyeccion;
+    public AudioClip sonidoEnfriamiento;
+    public AudioClip sonidoExpulsion;
 
-
-    // =========================================================
-    // --- NUEVA FUNCIÓN DINÁMICA PARA LOS BOTONES VR ---
-    // =========================================================
-    public void IniciarCicloConPieza(GameObject piezaDesdeBoton)
+    // --- NUEVA FUNCIÓN: PARA EL BOTÓN DE ENCENDIDO ---
+    public void BotonPrenderApagar()
     {
-        // 1. Verificamos anti-rebote
-        if (Time.time - tiempoUltimoClick < esperaRebote) return;
-        tiempoUltimoClick = Time.time;
-
-        if (encendida && !procesoEnCurso)
+        if (maquinaEnUso)
         {
-            // 2. ACTUALIZACIÓN DEL MOLDE
-            if (piezaDesdeBoton != null)
-            {
-                moldePrefab = piezaDesdeBoton;
-                // Mensaje en Cyan para identificar el cambio de pieza
-                Debug.Log("<color=cyan>🔧 INYECTORA: Molde actualizado a -> </color>" + piezaDesdeBoton.name);
-            }
-            else
-            {
-                Debug.LogWarning("⚠️ El botón no envió ninguna pieza, usando la que estaba por defecto.");
-            }
+            Debug.LogWarning("⚠️ No puedes apagar la máquina a mitad de un ciclo.");
+            return;
+        }
 
-            StartCoroutine(ProcesoInyeccion());
+        maquinaEncendida = !maquinaEncendida; // Cambia de apagado a prendido y viceversa
+
+        if (maquinaEncendida)
+        {
+            Debug.Log("⚡ MÁQUINA ENCENDIDA");
+            Reproducir(sonidoEncendido);
         }
         else
         {
-            Debug.Log("<color=orange>⚠️ La máquina está apagada u ocupada.</color>");
+            Debug.Log("🔌 MÁQUINA APAGADA");
+            if (reproductorSonido.isPlaying) reproductorSonido.Stop(); // Silencia si se apaga
         }
     }
 
-
-    // =========================================================
-    // --- TUS FUNCIONES ORIGINALES (BOTONES SIMPLES) ---
-    // =========================================================
-
-    [ContextMenu("TEST: Botón Power")]
-    public void BotonEncender()
+    // --- FUNCIÓN LIMPIA: PARA EL BOTÓN DE INICIAR CICLO ---
+    public void IniciarCicloDeInyeccion()
     {
-        // SI ha pasado menos de medio segundo desde el último click... ¡IGNORAR!
-        if (Time.time - tiempoUltimoClick < esperaRebote)
+        // Seguro #1: ¿Está prendida?
+        if (!maquinaEncendida)
         {
-            return; // Nos salimos sin hacer nada
+            Debug.LogWarning("❌ La máquina está apagada. Presiona el botón de encendido primero.");
+            return;
         }
 
-        // Si pasó el tiempo, actualizamos el reloj y ejecutamos
-        tiempoUltimoClick = Time.time;
-
-        encendida = !encendida;
-        Debug.Log("Inyectora Encendida: " + encendida);
-        ActualizarLuces();
-    }
-
-    [ContextMenu("TEST: Botón Iniciar")]
-    public void BotonIniciarCiclo() // Tu función original para iniciar sin cambiar pieza
-    {
-        if (Time.time - tiempoUltimoClick < esperaRebote) return; // Anti-rebote
-        tiempoUltimoClick = Time.time;
-
-        if (encendida && !procesoEnCurso)
+        // Seguro #2: ¿Ya está trabajando?
+        if (!maquinaEnUso)
         {
-            StartCoroutine(ProcesoInyeccion());
+            StartCoroutine(SecuenciaInyeccionReal());
         }
         else
         {
-            Debug.Log("⚠️ La máquina está apagada u ocupada.");
+            Debug.Log("⏳ La máquina ya está en pleno ciclo. Espera a que termine.");
         }
     }
 
-
-    // =========================================================
-    // --- LA LÓGICA INTERNA ---
-    // =========================================================
-
-    IEnumerator ProcesoInyeccion()
+    IEnumerator SecuenciaInyeccionReal()
     {
-        procesoEnCurso = true;
-        Debug.Log("♻️ Iniciando ciclo de inyección...");
+        maquinaEnUso = true;
+        Debug.Log("🟢 INICIANDO CICLO...");
 
-        // Estado visual: Trabajando (Luz Roja)
-        if (luzEstado != null) luzEstado.color = Color.red;
-        if (audioMaquina != null) audioMaquina.Play();
+        Reproducir(sonidoMecanica);
+        Debug.Log("Cerrando molde...");
+        yield return new WaitForSeconds(tiempoCierreMolde);
 
-        // 🎬 ¡DISPARAMOS LA ANIMACIÓN!
-        if (animadorMaquina != null)
-        {
-            animadorMaquina.SetTrigger("IniciarAnimacion");
-        }
+        Reproducir(sonidoInyeccion);
+        Debug.Log("Inyectando polímero...");
+        yield return new WaitForSeconds(tiempoInyeccion);
 
-        // Esperamos el tiempo de fabricación
-        yield return new WaitForSeconds(tiempoDeInyeccion);
+        Debug.Log("Compactando pieza...");
+        yield return new WaitForSeconds(tiempoCompactacion);
 
-        // Crear la pieza
+        Reproducir(sonidoEnfriamiento);
+        Debug.Log("Enfriando...");
+        yield return new WaitForSeconds(tiempoEnfriamiento);
+
+        Reproducir(sonidoMecanica);
+        Debug.Log("Abriendo molde...");
+        yield return new WaitForSeconds(tiempoApertura);
+
+        Reproducir(sonidoExpulsion);
         ExpulsarPieza();
 
-        // Restaurar estado
-        procesoEnCurso = false;
-        ActualizarLuces();
-        Debug.Log("✅ Ciclo terminado.");
+        maquinaEnUso = false;
+        Debug.Log("✅ CICLO TERMINADO. Lista para otra pieza.");
+    }
+
+    void Reproducir(AudioClip clip)
+    {
+        if (reproductorSonido != null && clip != null)
+        {
+            reproductorSonido.clip = clip;
+            reproductorSonido.Play();
+        }
     }
 
     void ExpulsarPieza()
     {
         if (moldePrefab != null && puntoDeSalida != null)
         {
-            // 1. Instanciamos la pieza
             GameObject nuevaPieza = Instantiate(moldePrefab, puntoDeSalida.position, puntoDeSalida.rotation);
-
-            // 2. Buscamos TODOS los MeshRenderers en la pieza principal y en sus hijos (¡Ojo a la 's' de Components!)
             MeshRenderer[] todosLosRenderers = nuevaPieza.GetComponentsInChildren<MeshRenderer>();
 
-            // 3. Verificamos si encontramos al menos uno
             if (todosLosRenderers.Length > 0)
             {
-                // 4. Recorremos cada parte de la taza (Cuerpo, Oreja, etc.)
                 foreach (MeshRenderer rend in todosLosRenderers)
                 {
-                    // 5. Recorremos todos los materiales de esa parte (por si tiene más de uno)
-                    foreach (Material mat in rend.materials)
-                    {
-                        mat.color = colorActualMaterial;
-                    }
+                    foreach (Material mat in rend.materials) mat.color = colorActualMaterial;
                 }
-                Debug.Log("🎨 Taza (y su oreja) pintada de color: " + colorActualMaterial);
             }
-            else
-            {
-                Debug.LogWarning("⚠️ La pieza no tiene MeshRenderers, no se pudo pintar.");
-            }
-        }
-        else
-        {
-            Debug.LogError("❌ FALTAN ASIGNAR OBJETOS EN EL INSPECTOR (Prefab o PuntoSalida)");
-        }
-    }
-    void ActualizarLuces()
-    {
-        if (luzEstado != null)
-        {
-            if (encendida) luzEstado.color = Color.green; // Verde = Lista
-            else luzEstado.color = Color.black; // Negro = Apagada
         }
     }
 }
