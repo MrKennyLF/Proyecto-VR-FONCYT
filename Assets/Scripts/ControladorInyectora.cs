@@ -1,8 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using TMPro;
 
 public class ControladorInyectora : MonoBehaviour
 {
+    [Header("Pantalla del Panel 📺")]
+    public TextMeshProUGUI textoPantalla;
+
     [Header("Estado de la Máquina")]
     public bool maquinaEncendida = false;
     private bool maquinaEnUso = false;
@@ -13,7 +17,7 @@ public class ControladorInyectora : MonoBehaviour
     public Color colorActualMaterial = Color.white;
 
     [Header("Animación 🎬")]
-    public Animator animadorMaquina; // <-- NUEVO: Aquí conectaremos tu animación
+    public Animator animadorMaquina;
 
     [Header("Tiempos Reales de Ciclo (Segundos)")]
     public float tiempoCierreMolde = 3f;
@@ -30,11 +34,19 @@ public class ControladorInyectora : MonoBehaviour
     public AudioClip sonidoEnfriamiento;
     public AudioClip sonidoExpulsion;
 
+    void ActualizarPantalla(string mensaje)
+    {
+        if (textoPantalla != null)
+        {
+            textoPantalla.text = mensaje;
+        }
+    }
+
     public void BotonPrenderApagar()
     {
         if (maquinaEnUso)
         {
-            Debug.LogWarning("⚠️ No puedes apagar la máquina a mitad de un ciclo.");
+            ActualizarPantalla("ERROR: CICLO EN PROGRESO");
             return;
         }
 
@@ -42,12 +54,12 @@ public class ControladorInyectora : MonoBehaviour
 
         if (maquinaEncendida)
         {
-            Debug.Log("⚡ MÁQUINA ENCENDIDA");
+            ActualizarPantalla("SISTEMA ENCENDIDO\nLISTO PARA INYECTAR");
             Reproducir(sonidoEncendido);
         }
         else
         {
-            Debug.Log("🔌 MÁQUINA APAGADA");
+            ActualizarPantalla(""); // Apaga la pantalla
             if (reproductorSonido != null && reproductorSonido.isPlaying) reproductorSonido.Stop();
         }
     }
@@ -56,7 +68,7 @@ public class ControladorInyectora : MonoBehaviour
     {
         if (!maquinaEncendida)
         {
-            Debug.LogWarning("❌ La máquina está apagada. Presiona el botón de encendido primero.");
+            ActualizarPantalla("ERROR: MAQUINA APAGADA");
             return;
         }
 
@@ -64,49 +76,57 @@ public class ControladorInyectora : MonoBehaviour
         {
             StartCoroutine(SecuenciaInyeccionReal());
         }
-        else
+    }
+
+    // --- NUEVO CRONÓMETRO: Cuenta regresiva fluida ---
+    IEnumerator EsperarYContar(float tiempoTotal, string mensajeProceso)
+    {
+        float tiempoRestante = tiempoTotal;
+
+        while (tiempoRestante > 0)
         {
-            Debug.Log("⏳ La máquina ya está en pleno ciclo. Espera a que termine.");
+            // ToString("F1") formatea el número para mostrar solo 1 decimal (Ej: 2.5 s)
+            ActualizarPantalla(mensajeProceso + "\n" + tiempoRestante.ToString("F1") + " s");
+
+            // Restamos el tiempo que tardó el último frame
+            tiempoRestante -= Time.deltaTime;
+
+            // Esperamos al siguiente frame para volver a actualizar
+            yield return null;
         }
     }
 
     IEnumerator SecuenciaInyeccionReal()
     {
         maquinaEnUso = true;
-        Debug.Log("🟢 INICIANDO CICLO...");
 
         // 1. CIERRE DEL MOLDE
         Reproducir(sonidoMecanica);
         if (animadorMaquina != null) animadorMaquina.SetTrigger("CerrarMolde");
-        Debug.Log("Cerrando molde...");
-        yield return new WaitForSeconds(tiempoCierreMolde);
+        yield return StartCoroutine(EsperarYContar(tiempoCierreMolde, "CERRANDO MOLDE..."));
 
         // 2. INYECCIÓN
         Reproducir(sonidoInyeccion);
-        Debug.Log("Inyectando polímero...");
-        yield return new WaitForSeconds(tiempoInyeccion);
+        yield return StartCoroutine(EsperarYContar(tiempoInyeccion, "INYECTANDO POLIMERO..."));
 
         // 3. COMPACTACIÓN
-        Debug.Log("Compactando pieza...");
-        yield return new WaitForSeconds(tiempoCompactacion);
+        yield return StartCoroutine(EsperarYContar(tiempoCompactacion, "COMPACTANDO PIEZA..."));
 
         // 4. ENFRIAMIENTO
         Reproducir(sonidoEnfriamiento);
-        Debug.Log("Enfriando...");
-        yield return new WaitForSeconds(tiempoEnfriamiento);
+        yield return StartCoroutine(EsperarYContar(tiempoEnfriamiento, "ENFRIANDO..."));
 
         // 5. APERTURA Y EXPULSIÓN
         Reproducir(sonidoMecanica);
         if (animadorMaquina != null) animadorMaquina.SetTrigger("AbrirMolde");
-        Debug.Log("Abriendo molde...");
-        yield return new WaitForSeconds(tiempoApertura);
+        yield return StartCoroutine(EsperarYContar(tiempoApertura, "ABRIENDO MOLDE..."));
 
         // 6. PIEZA LISTA
+        ActualizarPantalla("PIEZA EXPULSADA\nLISTO");
         Reproducir(sonidoExpulsion);
         ExpulsarPieza();
 
         maquinaEnUso = false;
-        Debug.Log("✅ CICLO TERMINADO. Lista para otra pieza.");
     }
 
     void Reproducir(AudioClip clip)
