@@ -3,65 +3,70 @@ using System.Collections;
 
 public class LlenadoTolva : MonoBehaviour
 {
-    [Header("ConfiguraciÛn Visual")]
-    [Tooltip("Arrastra aquÌ el objeto 3D que simula la masa de pellets")]
-    public Transform masaDePellets;
+    [Header("Objetos")]
+    [Tooltip("La esfera con la textura de pellets")]
+    public Transform esferaPellets; 
+    
+    [Tooltip("Crea un objeto vac√≠o donde la tolva est√° vac√≠a (escondido abajo)")]
+    public Transform puntoVacio; 
+    
+    [Tooltip("Crea un objeto vac√≠o donde la tolva est√° llena (arriba)")]
+    public Transform puntoLleno; 
 
-    [Tooltip("øCu·ntos segundos tarda en llenarse?")]
-    public float tiempoDeLlenado = 4.0f;
+    [Header("Configuraci√≥n")]
+    public float tiempoDeLlenado = 4.0f; 
+    public AudioSource audioLlenado;
 
-    [Header("Sonido (Opcional)")]
-    public AudioSource audioLlenado; // Sonido de piedritas cayendo
-
-    private Vector3 escalaInicial;
     private bool estaLlena = false;
 
     void Start()
     {
-        if (masaDePellets != null)
+        // Al iniciar, escondemos la esfera en el punto m√°s bajo
+        if (esferaPellets != null && puntoVacio != null)
         {
-            // 1. Guardamos el tamaÒo original (la tolva llena)
-            escalaInicial = masaDePellets.localScale;
-
-            // 2. Vaciamos la tolva al inicio aplastando la escala Y a 0
-            masaDePellets.localScale = new Vector3(escalaInicial.x, 0, escalaInicial.z);
+            esferaPellets.position = puntoVacio.position;
         }
     }
 
-    // Esta es la funciÛn que conectar·s a tu botÛn de "Llenar Tolva"
     public void IniciarLlenado()
     {
-        if (!estaLlena && masaDePellets != null)
+        if (!estaLlena && esferaPellets != null && puntoVacio != null && puntoLleno != null)
         {
             StartCoroutine(RutinaLlenado());
+        }
+        else if (estaLlena)
+        {
+            Debug.Log("La tolva ya est√° llena.");
+        }
+        else
+        {
+            Debug.LogError("Faltan asignar objetos en el inspector de LlenadoTolva.");
         }
     }
 
     IEnumerator RutinaLlenado()
     {
         if (audioLlenado != null) audioLlenado.Play();
-        Debug.Log("? Llenando tolva...");
+        Debug.Log("‚è≥ Llenando tolva...");
 
         float tiempoPasado = 0f;
-        Vector3 escalaVacia = new Vector3(escalaInicial.x, 0, escalaInicial.z);
 
-        // El ciclo while hace que crezca frame por frame
         while (tiempoPasado < tiempoDeLlenado)
         {
             tiempoPasado += Time.deltaTime;
             float porcentaje = tiempoPasado / tiempoDeLlenado;
 
-            // Lerp calcula el punto intermedio exacto entre vacÌo y lleno
-            masaDePellets.localScale = Vector3.Lerp(escalaVacia, escalaInicial, porcentaje);
+            // En lugar de escalar, MOvemos la esfera de abajo hacia arriba
+            esferaPellets.position = Vector3.Lerp(puntoVacio.position, puntoLleno.position, porcentaje);
 
-            yield return null; // Espera al siguiente frame
+            yield return null; 
         }
 
-        // Aseguramos que termine exactamente en el tamaÒo 100%
-        masaDePellets.localScale = escalaInicial;
+        // Aseguramos que termine exactamente en la posici√≥n final
+        esferaPellets.position = puntoLleno.position;
         estaLlena = true;
-
+        
         if (audioLlenado != null) audioLlenado.Stop();
-        Debug.Log("? Tolva llena al 100%");
+        Debug.Log("‚úÖ Tolva llena al 100%");
     }
 }
