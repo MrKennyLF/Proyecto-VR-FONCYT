@@ -3,16 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\Design\\Documents\\Proyecto VR 16Enero2026\\JUEGO_VR_JMY.v3\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{80C162C8-AF3C-3038-A01C-65102FC085C9}|Assembly-CSharp.csproj|c:\\users\\design\\documents\\proyecto vr 16enero2026\\juego_vr_jmy.v3\\assets\\scripts\\manejadorumbral.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{80C162C8-AF3C-3038-A01C-65102FC085C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\manejadorumbral.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{80C162C8-AF3C-3038-A01C-65102FC085C9}|Assembly-CSharp.csproj|c:\\users\\design\\documents\\proyecto vr 16enero2026\\juego_vr_jmy.v3\\assets\\scripts\\sensorentrada.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{80C162C8-AF3C-3038-A01C-65102FC085C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\sensorentrada.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{80C162C8-AF3C-3038-A01C-65102FC085C9}|Assembly-CSharp.csproj|c:\\users\\design\\documents\\proyecto vr 16enero2026\\juego_vr_jmy.v3\\assets\\scripts\\receptortolva.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{80C162C8-AF3C-3038-A01C-65102FC085C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\receptortolva.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{80C162C8-AF3C-3038-A01C-65102FC085C9}|Assembly-CSharp.csproj|C:\\Users\\Design\\Documents\\Proyecto VR 16Enero2026\\JUEGO_VR_JMY.v3\\assets\\scripts\\llenadotolva.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{80C162C8-AF3C-3038-A01C-65102FC085C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\llenadotolva.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{80C162C8-AF3C-3038-A01C-65102FC085C9}|Assembly-CSharp.csproj|c:\\users\\design\\documents\\proyecto vr 16enero2026\\juego_vr_jmy.v3\\assets\\scripts\\manejadorumbral.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{80C162C8-AF3C-3038-A01C-65102FC085C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\manejadorumbral.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{80C162C8-AF3C-3038-A01C-65102FC085C9}|Assembly-CSharp.csproj|C:\\Users\\Design\\Documents\\Proyecto VR 16Enero2026\\JUEGO_VR_JMY.v3\\assets\\scripts\\sensorentrada.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{80C162C8-AF3C-3038-A01C-65102FC085C9}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\sensorentrada.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{80C162C8-AF3C-3038-A01C-65102FC085C9}|Assembly-CSharp.csproj|C:\\Users\\Design\\Documents\\Proyecto VR 16Enero2026\\JUEGO_VR_JMY.v3\\assets\\scripts\\botematerial.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -31,6 +35,19 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "ReceptorTolva.cs",
+              "DocumentMoniker": "C:\\Users\\Design\\Documents\\Proyecto VR 16Enero2026\\JUEGO_VR_JMY.v3\\Assets\\Scripts\\ReceptorTolva.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\ReceptorTolva.cs",
+              "ToolTip": "C:\\Users\\Design\\Documents\\Proyecto VR 16Enero2026\\JUEGO_VR_JMY.v3\\Assets\\Scripts\\ReceptorTolva.cs",
+              "RelativeToolTip": "Assets\\Scripts\\ReceptorTolva.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADAAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-22T23:39:03.243Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "ManejadorUmbral.cs",
               "DocumentMoniker": "C:\\Users\\Design\\Documents\\Proyecto VR 16Enero2026\\JUEGO_VR_JMY.v3\\Assets\\Scripts\\ManejadorUmbral.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\ManejadorUmbral.cs",
@@ -43,7 +60,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "SensorEntrada.cs",
               "DocumentMoniker": "C:\\Users\\Design\\Documents\\Proyecto VR 16Enero2026\\JUEGO_VR_JMY.v3\\Assets\\Scripts\\SensorEntrada.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\SensorEntrada.cs",
@@ -51,24 +68,24 @@
               "RelativeToolTip": "Assets\\Scripts\\SensorEntrada.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-15T23:30:21.694Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-15T23:30:21.694Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "LlenadoTolva.cs",
               "DocumentMoniker": "C:\\Users\\Design\\Documents\\Proyecto VR 16Enero2026\\JUEGO_VR_JMY.v3\\Assets\\Scripts\\LlenadoTolva.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\LlenadoTolva.cs",
               "ToolTip": "C:\\Users\\Design\\Documents\\Proyecto VR 16Enero2026\\JUEGO_VR_JMY.v3\\Assets\\Scripts\\LlenadoTolva.cs",
               "RelativeToolTip": "Assets\\Scripts\\LlenadoTolva.cs",
-              "ViewState": "AgIAABgAAAAAAAAAAAAAAEIAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAACMAAAAAAAAAAAA9wEwAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-15T22:08:43.365Z"
+              "WhenOpened": "2026-04-15T22:08:43.365Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "BoteMaterial.cs",
               "DocumentMoniker": "C:\\Users\\Design\\Documents\\Proyecto VR 16Enero2026\\JUEGO_VR_JMY.v3\\Assets\\Scripts\\BoteMaterial.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\BoteMaterial.cs",

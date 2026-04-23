@@ -4,50 +4,57 @@ using System.Collections;
 public class LlenadoTolva : MonoBehaviour
 {
     [Header("Objetos")]
-    [Tooltip("La esfera con la textura de pellets")]
-    public Transform esferaPellets; 
-    
-    [Tooltip("Crea un objeto vacío donde la tolva está vacía (escondido abajo)")]
-    public Transform puntoVacio; 
-    
-    [Tooltip("Crea un objeto vacío donde la tolva está llena (arriba)")]
-    public Transform puntoLleno; 
+    public Transform esferaPellets;
+    public Transform puntoVacio;
+    public Transform puntoLleno;
 
     [Header("Configuración")]
-    public float tiempoDeLlenado = 4.0f; 
+    public float tiempoDeLlenado = 4.0f;
     public AudioSource audioLlenado;
 
     private bool estaLlena = false;
 
     void Start()
     {
-        // Al iniciar, escondemos la esfera en el punto más bajo
         if (esferaPellets != null && puntoVacio != null)
         {
             esferaPellets.position = puntoVacio.position;
+            Debug.Log("🏁 Inicio: Esfera posicionada en el fondo.");
+        }
+    }
+
+    void Update()
+    {
+        // MODO PRUEBA: Presiona la BARRA ESPACIADORA en tu teclado para probar
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Debug.Log("⌨️ Tecla ESPACIO presionada. Forzando llenado...");
+            IniciarLlenado();
         }
     }
 
     public void IniciarLlenado()
     {
+        Debug.Log("⚙️ Intentando iniciar llenado...");
+
         if (!estaLlena && esferaPellets != null && puntoVacio != null && puntoLleno != null)
         {
             StartCoroutine(RutinaLlenado());
         }
         else if (estaLlena)
         {
-            Debug.Log("La tolva ya está llena.");
+            Debug.LogWarning("⚠️ La tolva ya está llena.");
         }
         else
         {
-            Debug.LogError("Faltan asignar objetos en el inspector de LlenadoTolva.");
+            Debug.LogError("❌ ERROR: Faltan asignar la esfera o los puntos Vacio/Lleno en el Inspector.");
         }
     }
 
     IEnumerator RutinaLlenado()
     {
+        Debug.Log("⏳ INICIANDO ANIMACIÓN DE LLENADO...");
         if (audioLlenado != null) audioLlenado.Play();
-        Debug.Log("⏳ Llenando tolva...");
 
         float tiempoPasado = 0f;
 
@@ -56,16 +63,14 @@ public class LlenadoTolva : MonoBehaviour
             tiempoPasado += Time.deltaTime;
             float porcentaje = tiempoPasado / tiempoDeLlenado;
 
-            // En lugar de escalar, MOvemos la esfera de abajo hacia arriba
             esferaPellets.position = Vector3.Lerp(puntoVacio.position, puntoLleno.position, porcentaje);
 
-            yield return null; 
+            yield return null;
         }
 
-        // Aseguramos que termine exactamente en la posición final
         esferaPellets.position = puntoLleno.position;
         estaLlena = true;
-        
+
         if (audioLlenado != null) audioLlenado.Stop();
         Debug.Log("✅ Tolva llena al 100%");
     }
