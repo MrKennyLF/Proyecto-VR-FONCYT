@@ -3,22 +3,22 @@ using UnityEngine;
 public class ManejadorNPC : MonoBehaviour
 {
     public Animator animador;
-    public GameObject globoDialogo; // Tu Canvas de diálogo
+    public GameObject globoDialogo; // Tu Canvas de diï¿½logo
 
     void Start()
     {
-        // El diálogo empieza oculto
+        // El diï¿½logo empieza oculto
         if (globoDialogo != null) globoDialogo.SetActive(false);
     }
 
     public void DarBienvenida()
     {
-        // 1. Inicia la animación (asegúrate de tener el Trigger 'Saludar' en el Animator)
+        // 1. Inicia la animaciï¿½n (asegï¿½rate de tener el Trigger 'Saludar' en el Animator)
         if (animador != null) animador.SetTrigger("Saludar");
 
-        // 2. Muestra el diálogo
+        // 2. Muestra el diï¿½logo
         if (globoDialogo != null) globoDialogo.SetActive(true);
 
-        Debug.Log("????? NPC: ¡Bienvenido al simulador!");
+        Debug.Log("????? NPC: ï¿½Bienvenido al simulador!");
     }
 }
