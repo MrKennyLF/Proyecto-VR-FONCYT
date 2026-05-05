@@ -100,4 +100,26 @@ public class GestorSeguridadMaster : MonoBehaviour
         }
         Debug.Log("📂 Reporte guardado en: " + ruta);
     }
+    public void RegistrarInfraccion(string motivo, int puntosPerdidos)
+    {
+        puntajeTotal -= puntosPerdidos; 
+        ActualizarPDA();
+        
+        // Alarma fuerte y vibración intensa por el accidente
+        ReproducirSonido(audioError);
+        VibrarMando(1.0f, 0.6f); 
+        MostrarFeedback($"[INFRACCIÓN CRÍTICA]: {motivo} (-{puntosPerdidos} pts)", Color.red);
+    }
+
+    public void MostrarAdvertenciaEspacial(string mensaje)
+    {
+        // Vibración sutil de advertencia
+        VibrarMando(0.3f, 0.2f);
+        MostrarFeedback($"[PRECAUCIÓN]: {mensaje}", Color.yellow);
+    }
+
+    public void LimpiarPantalla()
+    {
+        MostrarFeedback("[SISTEMA ESTABLE]", Color.green);
+    }
 }
