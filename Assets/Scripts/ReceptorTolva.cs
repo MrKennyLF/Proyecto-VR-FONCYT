@@ -6,18 +6,21 @@ public class ReceptorTolva : MonoBehaviour
     public MeshRenderer materialDentroDeTolva;
     public ControladorInyectora controladorDeLaMaquina;
 
-    [Header("ConexiÛn AnimaciÛn (Nueva)")]
-    [Tooltip("Arrastra aquÌ el objeto que tiene el script LlenadoTolva")]
+    [Header("Conexi√≥n Animaci√≥n (Nueva)")]
+    [Tooltip("Arrastra aqu√≠ el objeto que tiene el script LlenadoTolva")]
     public LlenadoTolva scriptAnimacionTolva;
 
-    // Este seguro evita que la animaciÛn se dispare 100 veces por segundo con las partÌculas
+    // Este seguro evita que la animaci√≥n se dispare 100 veces por segundo con las part√≠culas
     private bool animacionIniciada = false;
 
     void OnParticleCollision(GameObject other)
     {
+        // Leemos AMBOS scripts de la caja desde donde vienen las part√≠culas
         BoteMaterial bote = other.GetComponentInParent<BoteMaterial>();
+        DatosCajaPellets datosCaja = other.GetComponentInParent<DatosCajaPellets>();
 
-        if (bote != null)
+        // Nos aseguramos de que encontramos los dos componentes
+        if (bote != null && datosCaja != null)
         {
             // 1. Pintamos el interior de la tolva (visual)
             if (materialDentroDeTolva != null)
@@ -25,22 +28,24 @@ public class ReceptorTolva : MonoBehaviour
                 materialDentroDeTolva.material.color = bote.colorPellets;
             }
 
-            // 2. Le pasamos el dato al cerebro de la m·quina (lÛgica)
+            // 2. Le pasamos el dato del color al cerebro de la m√°quina (l√≥gica de expulsi√≥n)
             if (controladorDeLaMaquina != null)
             {
                 controladorDeLaMaquina.colorActualMaterial = bote.colorPellets;
             }
 
-            // 3. Disparamos la nueva animaciÛn de elevaciÛn (Solo una vez)
+            // 3. Disparamos la nueva animaci√≥n de elevaci√≥n (Solo una vez)
             if (scriptAnimacionTolva != null && !animacionIniciada)
             {
                 animacionIniciada = true; // Ponemos el seguro
-                scriptAnimacionTolva.IniciarLlenado();
+                
+                // LA CORRECCI√ìN: Ahora le pasamos la llave correcta con el tipo de pl√°stico y la cantidad
+                scriptAnimacionTolva.IniciarLlenado(datosCaja.tipoDePlastico, datosCaja.cantidadQueAporta);
             }
         }
     }
 
-    // Llama a esta funciÛn desde otro script si en alg˙n momento "vacÌas" la m·quina 
+    // Llama a esta funci√≥n desde otro script si en alg√∫n momento "vac√≠as" la m√°quina 
     // y necesitas que la tolva pueda volver a llenarse en el futuro.
     public void ResetearSensor()
     {
