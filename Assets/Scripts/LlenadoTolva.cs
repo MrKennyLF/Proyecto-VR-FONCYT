@@ -79,17 +79,4 @@ public class LlenadoTolva : MonoBehaviour
             Debug.Log($"🧠 Datos enviados: {cantidadPendiente} de {tipoPendiente}");
         }
     }
-    // Llama a esta función con el botón de purga para resetear los visuales
-    public void VaciarVisualmente()
-    {
-        estaLlena = false; // Quitamos el candado lógico
-
-        // Regresamos la masa visual de pellets hasta el fondo
-        if (esferaPellets != null && puntoVacio != null)
-        {
-            esferaPellets.position = puntoVacio.position;
-        }
-
-        Debug.Log("🗑️ Tolva vaciada visualmente.");
-    }
 }

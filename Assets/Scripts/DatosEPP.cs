@@ -5,7 +5,7 @@ public class DatosEPP : ScriptableObject
 {
     [Header("Identificación")]
     public string nombreEquipo;
-    public enum Categoria { Cabeza, Manos, Ojos, Cuerpo }
+    public enum Categoria { Cabeza, Manos, Ojos, Cuerpo, Pies, Cara}
     public Categoria tipoDeEquipo;
 
     [Header("Reglas de Evaluación")]
