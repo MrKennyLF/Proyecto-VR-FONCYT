@@ -44,6 +44,21 @@ public class GestorSeguridadMaster : MonoBehaviour
             MostrarFeedback($"[ALERTA]: {itemSeleccionado.mensajeAlerta}", Color.red);
         }
     }
+    [Header("Configuración de Máquina ⚙️")]
+    [Tooltip("¿Cuántas piezas correctas debe traer para usar la inyectora?")]
+    public int piezasRequeridas = 5; // Ajusta esto según si piden lentes y chaleco
+
+    // La máquina usará esta función para saber si tiene permiso de arrancar
+    public bool TienePermisoDeOperar()
+    {
+        int correctas = 0;
+        foreach (var item in equipoEquipado)
+        {
+            if (item.esCorrecto) correctas++;
+        }
+
+        return correctas >= piezasRequeridas;
+    }
 
     private void ActualizarPDA()
     {

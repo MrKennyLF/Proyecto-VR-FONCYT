@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Meta.XR.BuildingBlocks::Meta.XR.BuildingBlocks.BuildingBlock
   blockId: f8766c17-aaf8-4b55-9431-de8deea83842
-  instanceId: 8cc146ff-166a-4718-b0be-831734d34a64
+  instanceId: 8530a4ef-709f-4394-95ce-781e6b61863d
   version: 1
   installationRoutineCheckpoint:
     _installationRoutineId: f8338144-8280-4ff6-9455-ae2bb9c20fe8
@@ -190,6 +190,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: dac50e6aad71efc47be87539f69b569b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8135284919761613216}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: dac50e6aad71efc47be87539f69b569b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3627601065522615652}
   m_SourcePrefab: {fileID: 100100000, guid: dac50e6aad71efc47be87539f69b569b, type: 3}
 --- !u!1 &124167742366429074 stripped
 GameObject:
@@ -267,6 +270,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.17630768, y: 0.091799855, z: 0.1280365}
   m_Center: {x: 0.026248932, y: 0.045934975, z: 0.0021133423}
+--- !u!114 &3627601065522615652
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 124167742366429074}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 428aff62d21e6b348b2cf8807db6d9c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DatosPieza
+  materialDeLaPieza: 0
 --- !u!4 &788958193377113384 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: dac50e6aad71efc47be87539f69b569b, type: 3}

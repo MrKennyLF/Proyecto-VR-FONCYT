@@ -4,7 +4,7 @@ using System.Collections;
 public class LlenadoTolva : MonoBehaviour
 {
     [Header("Conexión Lógica 🧠")]
-    public ControladorInyectora inyectora; 
+    public ControladorInyectora inyectora;
     // ¡Eliminamos las variables de Tipo y Cantidad de aquí!
 
     [Header("Objetos Visuales 👁️")]
@@ -78,5 +78,22 @@ public class LlenadoTolva : MonoBehaviour
             inyectora.AgregarPelletsATolva(tipoPendiente, cantidadPendiente);
             Debug.Log($"🧠 Datos enviados: {cantidadPendiente} de {tipoPendiente}");
         }
+    }
+    public void VaciarVisualmente()
+    {
+        // 1. Regresamos la malla de los pellets a la posición de fondo (vacío)
+        if (esferaPellets != null && puntoVacio != null)
+        {
+            esferaPellets.position = puntoVacio.position;
+        }
+
+        // 2. Liberamos el candado lógico para que la tolva acepte un nuevo costal
+        estaLlena = false;
+
+        // 3. Limpiamos cualquier residuo en la memoria de la animación
+        tipoPendiente = TipoPellet.Ninguno;
+        cantidadPendiente = 0;
+
+        Debug.Log("🧹 Animación de purga completada: Tolva vacía visualmente.");
     }
 }

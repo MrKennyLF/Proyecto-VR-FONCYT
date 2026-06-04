@@ -20,7 +20,7 @@ public class ControladorInyectora : MonoBehaviour
 {
     [Header("Pantallas del Panel 📺")]
     public TextMeshProUGUI textoPantalla;
-    public TextMeshProUGUI pantallaTemperatura; 
+    public TextMeshProUGUI pantallaTemperatura;
 
     [Header("Estado General de la Máquina")]
     public bool maquinaEncendida = false;
@@ -31,8 +31,8 @@ public class ControladorInyectora : MonoBehaviour
     public float temperaturaAmbiente = 25f;
     public float temperaturaMaximaCañon = 250f;
     [Tooltip("Grados por segundo. Bájalo a 1 o 1.5 si va muy rápido")]
-    public float velocidadCalentamiento = 5f; 
-    public float velocidadEnfriamiento = 2f;  
+    public float velocidadCalentamiento = 5f;
+    public float velocidadEnfriamiento = 2f;
 
     [Header("Estabilidad Térmica ⏱️")]
     public float[] mesetasDeTemperatura = { 160f, 180f, 200f };
@@ -70,7 +70,7 @@ public class ControladorInyectora : MonoBehaviour
 
     [Header("Sensores de la Máquina (Estado Actual)")]
     public TipoPellet pelletEnTolvaActual = TipoPellet.Ninguno;
-    public float temperaturaActual = 25f; 
+    public float temperaturaActual = 25f;
     public int cantidadEnTolvaActual = 0;
 
 
@@ -85,20 +85,17 @@ public class ControladorInyectora : MonoBehaviour
         // --- CÁLCULO FÍSICO DE LA TEMPERATURA ---
         if (resistenciasEncendidas)
         {
-            // Solo calienta si NO está en una pausa de estabilización
             if (!enPausaTermica)
             {
                 if (temperaturaActual < temperaturaMaximaCañon)
                 {
                     temperaturaActual += velocidadCalentamiento * Time.deltaTime;
 
-                    // Revisamos si cruzamos la próxima meseta térmica
                     if (indiceMesetaActual < mesetasDeTemperatura.Length)
                     {
                         if (temperaturaActual >= mesetasDeTemperatura[indiceMesetaActual])
                         {
-                            // Fijamos la temperatura exactamente en la meseta
-                            temperaturaActual = mesetasDeTemperatura[indiceMesetaActual]; 
+                            temperaturaActual = mesetasDeTemperatura[indiceMesetaActual];
                             StartCoroutine(RutinaEstabilizacion());
                         }
                     }
@@ -107,9 +104,8 @@ public class ControladorInyectora : MonoBehaviour
         }
         else
         {
-            // Si se apagan las resistencias, cancelamos pausas y enfriamos
             enPausaTermica = false;
-            
+
             if (temperaturaActual > temperaturaAmbiente)
             {
                 temperaturaActual -= velocidadEnfriamiento * Time.deltaTime;
@@ -133,10 +129,20 @@ public class ControladorInyectora : MonoBehaviour
         }
     }
 
-    // --- FUNCIONES DE BOTONES (INTERFAZ VR) ---
+    // =========================================================
+    // --- FUNCIONES DE BOTONES CON SEGURO EPP INTEGRADO ---
+    // =========================================================
 
     public void BotonPrenderApagar()
     {
+        // --- SEGURO EPP ---
+        if (GestorSeguridadMaster.Instancia != null && !GestorSeguridadMaster.Instancia.TienePermisoDeOperar())
+        {
+            GestorSeguridadMaster.Instancia.MostrarAdvertenciaEspacial("ACCESO DENEGADO: Falta EPP.");
+            GestorSeguridadMaster.Instancia.fuenteDeAudio.PlayOneShot(GestorSeguridadMaster.Instancia.audioError);
+            return;
+        }
+
         if (maquinaEnUso)
         {
             ActualizarPantalla("ERROR: CICLO EN PROGRESO");
@@ -155,7 +161,7 @@ public class ControladorInyectora : MonoBehaviour
             ActualizarPantalla("SISTEMA APAGADO");
             recetaCargada = false;
             recetaActual = null;
-            resistenciasEncendidas = false; 
+            resistenciasEncendidas = false;
             enPausaTermica = false;
             if (reproductorSonido != null && reproductorSonido.isPlaying) reproductorSonido.Stop();
         }
@@ -163,11 +169,19 @@ public class ControladorInyectora : MonoBehaviour
 
     public void ToggleCalentador()
     {
-        if (!maquinaEncendida) return; 
-        
+        // --- SEGURO EPP ---
+        if (GestorSeguridadMaster.Instancia != null && !GestorSeguridadMaster.Instancia.TienePermisoDeOperar())
+        {
+            GestorSeguridadMaster.Instancia.MostrarAdvertenciaEspacial("ACCESO DENEGADO: Falta EPP.");
+            GestorSeguridadMaster.Instancia.fuenteDeAudio.PlayOneShot(GestorSeguridadMaster.Instancia.audioError);
+            return;
+        }
+
+        if (!maquinaEncendida) return;
+
         resistenciasEncendidas = !resistenciasEncendidas;
-        
-        if(resistenciasEncendidas)
+
+        if (resistenciasEncendidas)
         {
             enPausaTermica = false;
             RecalcularSiguienteMeseta();
@@ -179,7 +193,6 @@ public class ControladorInyectora : MonoBehaviour
         }
     }
 
-    // Función auxiliar para saber qué meseta sigue si el calentador se apaga y se vuelve a encender a medias
     private void RecalcularSiguienteMeseta()
     {
         indiceMesetaActual = 0;
@@ -190,7 +203,6 @@ public class ControladorInyectora : MonoBehaviour
                 indiceMesetaActual = i;
                 break;
             }
-            // Si la temperatura actual es mayor a la última meseta (ej. estamos a 210°C)
             if (i == mesetasDeTemperatura.Length - 1 && temperaturaActual >= mesetasDeTemperatura[i])
             {
                 indiceMesetaActual = mesetasDeTemperatura.Length;
@@ -198,25 +210,27 @@ public class ControladorInyectora : MonoBehaviour
         }
     }
 
-    // --- CORRUTINA DE ESTABILIZACIÓN ---
     IEnumerator RutinaEstabilizacion()
     {
         enPausaTermica = true;
         Debug.Log("🔥 Meseta térmica alcanzada: " + temperaturaActual + "°C. Estabilizando por " + tiempoEstabilizacion + " segundos.");
-        
-        // Opcional: Puedes descomentar la siguiente línea si quieres que la pantalla principal avise de la estabilización
-        // ActualizarPantalla("ESTABILIZANDO\nTEMPERATURA...");
-
         yield return new WaitForSeconds(tiempoEstabilizacion);
-        
+
         indiceMesetaActual++;
         enPausaTermica = false;
-
         Debug.Log("🔥 Estabilización terminada. Retomando calentamiento hacia la siguiente fase.");
     }
 
     public void IntentarCargarReceta(int indiceBoton)
     {
+        // --- SEGURO EPP ---
+        if (GestorSeguridadMaster.Instancia != null && !GestorSeguridadMaster.Instancia.TienePermisoDeOperar())
+        {
+            GestorSeguridadMaster.Instancia.MostrarAdvertenciaEspacial("ACCESO DENEGADO: Falta EPP.");
+            GestorSeguridadMaster.Instancia.fuenteDeAudio.PlayOneShot(GestorSeguridadMaster.Instancia.audioError);
+            return;
+        }
+
         if (!maquinaEncendida)
         {
             ActualizarPantalla("ERROR: MAQUINA APAGADA");
@@ -261,6 +275,14 @@ public class ControladorInyectora : MonoBehaviour
 
     public void IniciarCicloDeInyeccion()
     {
+        // --- SEGURO EPP ---
+        if (GestorSeguridadMaster.Instancia != null && !GestorSeguridadMaster.Instancia.TienePermisoDeOperar())
+        {
+            GestorSeguridadMaster.Instancia.MostrarAdvertenciaEspacial("ACCESO DENEGADO: Falta EPP.");
+            GestorSeguridadMaster.Instancia.fuenteDeAudio.PlayOneShot(GestorSeguridadMaster.Instancia.audioError);
+            return;
+        }
+
         if (!maquinaEncendida)
         {
             ActualizarPantalla("ERROR: MAQUINA APAGADA");
@@ -295,7 +317,7 @@ public class ControladorInyectora : MonoBehaviour
         {
             ActualizarPantalla(mensajeProceso + "\n" + tiempoRestante.ToString("F1") + " s");
             tiempoRestante -= Time.deltaTime;
-            yield return null; 
+            yield return null;
         }
     }
 
@@ -348,6 +370,14 @@ public class ControladorInyectora : MonoBehaviour
 
     public void PurgarTolva()
     {
+        // --- SEGURO EPP ---
+        if (GestorSeguridadMaster.Instancia != null && !GestorSeguridadMaster.Instancia.TienePermisoDeOperar())
+        {
+            GestorSeguridadMaster.Instancia.MostrarAdvertenciaEspacial("ACCESO DENEGADO: Falta EPP.");
+            GestorSeguridadMaster.Instancia.fuenteDeAudio.PlayOneShot(GestorSeguridadMaster.Instancia.audioError);
+            return;
+        }
+
         cantidadEnTolvaActual = 0;
         pelletEnTolvaActual = TipoPellet.Ninguno;
         ActualizarPantalla("TOLVA PURGADA\nY VACIA");
@@ -373,7 +403,6 @@ public class ControladorInyectora : MonoBehaviour
         {
             GameObject nuevaPieza = Instantiate(moldePrefab, puntoDeSalida.position, puntoDeSalida.rotation);
             MeshRenderer[] todosLosRenderers = nuevaPieza.GetComponentsInChildren<MeshRenderer>();
-
             if (todosLosRenderers.Length > 0)
             {
                 foreach (MeshRenderer rend in todosLosRenderers)
@@ -381,6 +410,9 @@ public class ControladorInyectora : MonoBehaviour
                     foreach (Material mat in rend.materials) mat.color = colorActualMaterial;
                 }
             }
+
+            DatosPieza adn = nuevaPieza.GetComponent<DatosPieza>();
+            if (adn != null) adn.materialDeLaPieza = pelletEnTolvaActual;
         }
     }
 }

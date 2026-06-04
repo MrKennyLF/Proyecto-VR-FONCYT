@@ -8,6 +8,7 @@ public class ControladorPDA : MonoBehaviour
     public GameObject paginaCapacidad;
     public GameObject paginaCantidades;
     public GameObject paginaTiposPellets;
+    public GameObject paginaRecetas;
 
     void Start()
     {
@@ -44,6 +45,11 @@ public class ControladorPDA : MonoBehaviour
         ApagarTodas();
         if (paginaTiposPellets != null) paginaTiposPellets.SetActive(true);
     }
+    public void MostrarRecetas()
+    {
+        ApagarTodas();
+        if (paginaRecetas != null) paginaRecetas.SetActive(true);
+    }
 
     // Función auxiliar para limpiar la pantalla antes de mostrar algo nuevo
     void ApagarTodas()
@@ -53,5 +59,6 @@ public class ControladorPDA : MonoBehaviour
         if (paginaCapacidad != null) paginaCapacidad.SetActive(false);
         if (paginaCantidades != null) paginaCantidades.SetActive(false);
         if (paginaTiposPellets != null) paginaTiposPellets.SetActive(false);
+        if (paginaRecetas != null) paginaRecetas.SetActive(false);
     }
 }

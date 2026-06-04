@@ -19,7 +19,6 @@ public class CajaRecoleccion : MonoBehaviour
 
     public List<TipoPellet> contenidoCaja = new List<TipoPellet>();
 
-    // Lista para guardar las piezas físicas y destruirlas al cerrar la caja
     private List<GameObject> tazasFisicas = new List<GameObject>();
     private bool cajaLlena = false;
 
@@ -36,62 +35,77 @@ public class CajaRecoleccion : MonoBehaviour
 
         if (other.CompareTag("PiezaPlastico"))
         {
-            // Evitamos que el Trigger cuente la misma taza dos veces si rebota
+            // Evitamos contar la misma taza dos veces
             if (tazasFisicas.Contains(other.gameObject)) return;
 
-            // 1. Leemos el ADN
+            // Leemos el ADN
             DatosPieza datosTaza = other.GetComponent<DatosPieza>();
             TipoPellet materialTaza = datosTaza != null ? datosTaza.materialDeLaPieza : TipoPellet.Ninguno;
             contenidoCaja.Add(materialTaza);
 
-            // 2. ACOMODAMOS LA TAZA VISUALMENTE (VERSIÓN NUCLEAR)
             int indiceHueco = contenidoCaja.Count - 1;
 
             if (indiceHueco < puntosDeAnclaje.Length)
             {
-                // A. Anclaje absoluto INMEDIATO
+                // A. Apagamos el SDK de Meta para que no interfiera
+                Behaviour grabbable = (Behaviour)other.GetComponent("Grabbable");
+                if (grabbable != null) grabbable.enabled = false;
+
+                Behaviour kinLocker = (Behaviour)other.GetComponent("RigidbodyKinematicLocker");
+                if (kinLocker != null) kinLocker.enabled = false;
+
+                // B. Congelamos las físicas
+                Rigidbody rb = other.GetComponent<Rigidbody>();
+                if (rb != null)
+                {
+                    rb.linearVelocity = Vector3.zero;
+                    rb.angularVelocity = Vector3.zero;
+                    rb.useGravity = false;
+                    rb.isKinematic = true;
+                }
+
+                // C. Apagamos los colisionadores
+                Collider[] colisionadores = other.GetComponentsInChildren<Collider>();
+                foreach (Collider col in colisionadores) col.enabled = false;
+
+                // D. Anclaje absoluto y herencia de escala (para que se adapte al punto)
                 other.transform.SetParent(puntosDeAnclaje[indiceHueco]);
                 other.transform.localPosition = Vector3.zero;
                 other.transform.localRotation = Quaternion.identity;
+                other.transform.localScale = Vector3.one;
 
-                // B. DESTRUIMOS LA FÍSICA PARA SIEMPRE
-                // Al destruir el Rigidbody, Meta ya no tiene qué empujar
-                Rigidbody rb = other.GetComponent<Rigidbody>();
-                if (rb != null) Destroy(rb);
-
-                // Destruimos el script Grabbable para que Meta suelte el objeto obligatoriamente
-                Behaviour grabbable = (Behaviour)other.GetComponent("Grabbable");
-                if (grabbable != null) Destroy(grabbable);
-
-                // Destruimos los colisionadores
-                Collider[] colisionadores = other.GetComponentsInChildren<Collider>();
-                foreach (Collider col in colisionadores) Destroy(col);
-
-                // Guardamos la referencia para destruirla al cerrar la caja
                 tazasFisicas.Add(other.gameObject);
             }
-        }
-        }
 
+            Debug.Log($"Taza colocada: {materialTaza}. Total: {contenidoCaja.Count}/4");
+
+            // Si llegamos a la capacidad, llamamos a la función de abajo
+            if (contenidoCaja.Count >= capacidadMaxima)
+            {
+                CerrarCaja();
+            }
+        }
+    }
+
+    // Esta función ahora está correctamente afuera del OnTriggerEnter
     void CerrarCaja()
     {
         cajaLlena = true;
 
-        // Como la caja ya se cerró con su tapa, destruimos las tazas interiores 
-        // para ahorrar RAM y evitar que la escena se sature de objetos
+        // Destruimos las mallas de las tazas para ahorrar RAM
         foreach (GameObject taza in tazasFisicas)
         {
             if (taza != null) Destroy(taza);
         }
 
-        // Transición visual y encendido de agarre de Meta
+        // Intercambio de modelos y encendido de agarre
         if (modeloAbierta != null) modeloAbierta.SetActive(false);
         if (modeloCerrada != null) modeloCerrada.SetActive(true);
         if (componenteAgarre != null) componenteAgarre.enabled = true;
 
-        Debug.Log("?? ¡Caja sellada!");
+        Debug.Log("?? ¡Caja sellada y lista para el rack!");
 
-        // Avisamos al generador de la banda para que mande otra
+        // Llamamos al Spawner para que mande otra caja
         GeneradorCajas generador = Object.FindFirstObjectByType<GeneradorCajas>();
         if (generador != null) generador.IniciarConteoParaNuevaCaja();
     }
