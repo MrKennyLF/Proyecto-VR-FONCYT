@@ -1,10 +1,19 @@
 # ninja log v5
 29	2538	7926386735876163	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	3d45fb344c731d9e
 38	2581	7926386736218570	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	2a345df72fe714e
-64	2610	7926386736584057	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	f5604b470a4b200c
-20	2694	7926386737427293	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	851a70a8076697ec
+3205	3323	7926386743794037	C:/Users/Design/Documents/Proyecto VR 16Enero2026/JUEGO_VR_JMY.v3/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/426tk1x6/obj/arm64-v8a/libgame.so	fec317f7f44bfcfa
 11	2757	7926386738127028	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	23d8f5b2f2a47852
+64	2610	7926386736584057	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	f5604b470a4b200c
 76	2904	7926386739564344	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	8105d2a72aa1caa7
+20	2694	7926386737427293	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	851a70a8076697ec
 50	3043	7926386740960972	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	8f4ddd87c65f13fb
 1	3205	7926386742520294	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	f784486bf666cb8f
-3205	3323	7926386743794037	C:/Users/Design/Documents/Proyecto VR 16Enero2026/JUEGO_VR_JMY.v3/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/426tk1x6/obj/arm64-v8a/libgame.so	fec317f7f44bfcfa
+36	3644	8034458044821472	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	2a345df72fe714e
+104	3700	8034458045478106	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	3d45fb344c731d9e
+62	3704	8034458045664968	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	f5604b470a4b200c
+49	3722	8034458046124538	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	851a70a8076697ec
+24	3821	8034458047140852	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	23d8f5b2f2a47852
+75	4141	8034458050640577	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	8105d2a72aa1caa7
+88	4189	8034458051076398	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	8f4ddd87c65f13fb
+11	4387	8034458053034466	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	f784486bf666cb8f
+4388	4651	8034458055734398	C:/Users/Design/Documents/Proyecto VR 16Enero2026/JUEGO_VR_JMY.v3/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/426tk1x6/obj/arm64-v8a/libgame.so	fec317f7f44bfcfa

@@ -53,6 +53,12 @@ public class GestorPedidos : MonoBehaviour
             Debug.Log("? ¡PEDIDO COMPLETADO CON ÉXITO!");
             if (audioPedidos != null && sonidoExito != null) audioPedidos.PlayOneShot(sonidoExito);
 
+            // --- NUEVO: Mensaje de ÉXITO a la PDA ---
+            if (GestorSeguridadMaster.Instancia != null)
+            {
+                GestorSeguridadMaster.Instancia.MostrarFeedback("? [LOGÍSTICA]: Caja aceptada. Excelente trabajo.", Color.green);
+            }
+
             AvanzarSiguientePedido();
         }
         else
@@ -60,7 +66,11 @@ public class GestorPedidos : MonoBehaviour
             Debug.LogWarning("? ERROR DE CALIDAD: LA CAJA NO COINCIDE CON EL PEDIDO.");
             if (audioPedidos != null && sonidoError != null) audioPedidos.PlayOneShot(sonidoError);
 
-            // Aquí podrías agregar lógica para restar puntos si tienen un sistema de puntuación
+            // --- NUEVO: Mensaje de ERROR a la PDA ---
+            if (GestorSeguridadMaster.Instancia != null)
+            {
+                GestorSeguridadMaster.Instancia.MostrarFeedback("? [RECHAZO]: La caja no cumple la receta del cliente.", Color.red);
+            }
         }
     }
 
@@ -78,11 +88,25 @@ public class GestorPedidos : MonoBehaviour
             pedidoActual = null;
             if (pantallaPedidos != null)
             {
-                pantallaPedidos.text = "<color=#70AD47><b>¡TURNO TERMINADO!</b>\nTodas las entregas completadas.</color>";
+                pantallaPedidos.text = "<color=#70AD47><b>¡TURNO TERMINADO!</b>\nTodas las entregas completadas.\nReporte de seguridad guardado.</color>";
+            }
+
+            // --- EL CIERRE DE TURNO ---
+            if (GestorSeguridadMaster.Instancia != null)
+            {
+                // Llama a la función que ya tenías programada para crear el TXT
+                GestorSeguridadMaster.Instancia.GenerarReporteFinal();
+
+                // Opcional: Sonido de victoria usando la bocina del gestor
+                if (sonidoExito != null && audioPedidos != null)
+                {
+                    audioPedidos.PlayOneShot(sonidoExito);
+                }
+
+                Debug.Log("?? ¡Juego terminado! Reporte guardado en la computadora.");
             }
         }
     }
-
     void ActualizarPantalla()
     {
         if (pantallaPedidos != null && pedidoActual != null)

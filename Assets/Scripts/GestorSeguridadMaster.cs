@@ -66,7 +66,7 @@ public class GestorSeguridadMaster : MonoBehaviour
             textoPuntajePDA.text = $"Certificación: {puntajeTotal} pts";
     }
 
-    private void MostrarFeedback(string mensaje, Color colorMensaje)
+    public void MostrarFeedback(string mensaje, Color colorMensaje)
     {
         if (textoRetroalimentacion != null)
         {
